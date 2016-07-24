@@ -1,6 +1,6 @@
 {
   "name": "sw-request",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ServiceWorker Helper Library",
   "main": "sw-request.js",
   "scripts": {
