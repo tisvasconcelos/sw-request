@@ -1,14 +1,15 @@
-var cacheService = (() => {
+var _cacheService = (() => {
   return {
     get(event, config) {
       console.log('trying by cache: ', event.request);
       return new Promise(function(resolve, reject){
         caches.match(event.request, {cacheName: config.cacheName})
           .then((response) => {
-            console.log('return with cache: ', event.request);
-            setTimeout(function(){
-              return response ? resolve(response) : reject(event);
-            }, 5000);
+            if(response) {
+              console.log('return with cache: ', event.request);
+              return resolve(response);
+            }
+            return reject(event);
           }).catch(err => {
             console.info('failed by cache');
             reject(event);
@@ -36,15 +37,18 @@ var cacheService = (() => {
   }
 })();
 
-var fetchService = (() => {
+var _fetchService = (() => {
   return {
     get(event) {
       console.log('trying by fetch: ', event.request);
       return new Promise(function(resolve, reject){
         fetch(event.request)
           .then((response) => {
-            console.log('return with fetch: ', event.request);
-            return response ? resolve(response) : reject(event);
+            if(response) {
+              console.log('return with fetch: ', event.request);
+              return resolve(response);
+            }
+            return reject(event);
           }).catch(err => {
             console.info('failed by fetch');
             reject(event);
@@ -70,39 +74,44 @@ var _promiseAny = function(promises) {
   });
 };
 
-var swRequest = (event, config) => {
-  if(!config.serviceOrder) {
-    console.log('choose fast');
-    return new Promise((resolve, reject) => {
-      _promiseAny([
-        cacheService.get(event, config),
-        fetchService.get(event)
-      ]).then(response => {
-        resolve(response);
-      }).catch(err => {
-        console.error(err);
-        reject(event);
-      });
-    });
-  } else {
-    let services = {
-      'cache': cacheService,
-      'fetch': fetchService
-    };
+const swRequest = (function(){
+  return {
+    get(event, config) {
+      if(!config.serviceOrder) {
+        console.log('choose fast');
+        return new Promise((resolve, reject) => {
+          _promiseAny([
+            _cacheService.get(event, config),
+            _fetchService.get(event)
+          ]).then(response => {
+            resolve(response);
+          }).catch(err => {
+            console.error(err);
+            reject(event);
+          });
+        });
+      } else {
+        let services = {
+          'cache': _cacheService,
+          'fetch': _fetchService
+        };
 
-    return new Promise((resolve, reject) => {
-      services[config.serviceOrder[0]].get(event, config)
-        .then(response => {
-          resolve(response);
-        }).catch(event => {
-          services[config.serviceOrder[1]].get(event)
+        return new Promise((resolve, reject) => {
+          services[config.serviceOrder[0]].get(event, config)
             .then(response => {
               resolve(response);
             }).catch(event => {
-              reject(event);
-            })
+              services[config.serviceOrder[1]].get(event, config)
+                .then(response => {
+                  resolve(response);
+                }).catch(event => {
+                  reject(event);
+                })
+            });
         });
-    });
+      }
+    },
+    fetchService: _fetchService,
+    cacheService: _cacheService
   }
-
-};
+})();
