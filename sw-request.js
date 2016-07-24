@@ -1,7 +1,3 @@
-var getCacheName = function(){
-
-}
-
 var cacheService = (() => {
   return {
     get(event, config) {
