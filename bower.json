@@ -1,7 +1,7 @@
 {
   "name": "sw-request",
   "main": "sw-request.js",
-  "version": "1.0.3-SNAPSHOT",
+  "version": "1.0.3",
   "homepage": "https://github.com/tisvasconcelos/sw-request",
   "authors": [
     "Tiago Vasconcelos <tisvasconcelos@gmail.com>"
