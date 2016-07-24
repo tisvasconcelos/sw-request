@@ -1,0 +1,28 @@
+{
+  "name": "sw-request",
+  "main": "sw-request.js",
+  "version": "1.0.3-SNAPSHOT",
+  "homepage": "https://github.com/tisvasconcelos/sw-request",
+  "authors": [
+    "Tiago Vasconcelos <tisvasconcelos@gmail.com>"
+  ],
+  "description": "ServiceWorker Helper Library",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "cache",
+    "fetch",
+    "pwa",
+    "serviceworker",
+    "sw"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
