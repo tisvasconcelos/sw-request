@@ -1,5 +1,5 @@
 if(navigator.serviceWorker) {
-  navigator.serviceWorker.register('/examples/cache-fetch/sw.js', {scope: '/examples/cache-fetch/'}).then(function(event){
+  navigator.serviceWorker.register('sw.js', {scope: './'}).then(function(event){
     console.log('register', event);
   }).catch(function(err){
     console.log('not register', err);

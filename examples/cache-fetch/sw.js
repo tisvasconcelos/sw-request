@@ -1,8 +1,8 @@
 var CACHE_NAME = 'cache-fetch-0.1';
 
-var files = ['/examples/cache-fetch/','/examples/cache-fetch/main.css','/examples/cache-fetch/main.js'];
+var files = ['./','./main.css','./main.js'];
 
-importScripts('/sw-request.js');
+importScripts('/sw-request/sw-request.js');
 
 self.addEventListener('install', function(event){
   console.log('installed');

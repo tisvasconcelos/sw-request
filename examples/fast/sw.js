@@ -1,8 +1,8 @@
 var CACHE_NAME = 'fast-0.1';
 
-var files = ['/examples/fast/','/examples/fast/main.css','/examples/fast/main.js'];
+var files = ['./','./main.css','./main.js'];
 
-importScripts('/sw-request.js');
+importScripts('/sw-request/sw-request.js');
 
 self.addEventListener('install', function(event){
   console.log('installed');
